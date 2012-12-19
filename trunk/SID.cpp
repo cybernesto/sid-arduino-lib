@@ -119,9 +119,6 @@ static Oscillator_t osc[OSCILLATORS];
 
 void initialize()
 {
-	// TIMER2: set OC2(A) to output
-	DDRB |= (1 << PB3);
-	
 	// TIMER1 used to generate sample and ms interrupts
 	// TIMER1: Normal Mode
 	// TIMER2: no prescaling
@@ -310,9 +307,6 @@ static void envelopes()
 		osc[n].envelope=osc[n].amp>>8;
 	}
 }
-#define LED1 (1 << 5)
-#define LED1_ON  PORTB|= LED1
-#define LED1_OFF PORTB&=~LED1
 
 /************************************************************************
 
@@ -359,6 +353,8 @@ SIGNAL (SIG_OVERFLOW2)
 
 void SID::begin()
 {
+	// TIMER2: set OC2(A) to output
+	pinMode(11, OUTPUT);
 	initialize();
 		
 	//initialize SID-registers	
