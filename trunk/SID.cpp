@@ -184,78 +184,53 @@ static int8_t wave(Voice_t *voice, uint16_t phase)
 
 static void waveforms()
 {
-	static uint16_t phase0,phase1,phase2;
+	static uint16_t phase[3], sig[3];
 	static int16_t temp,temp1;
-	static uint8_t k;
+	static uint8_t i,j,k;
 	static uint16_t noise = 0xACE1;
 	static uint8_t noise8;
-	static uint16_t sig0,sig1,sig2;
 	static uint16_t tempphase;
 
 	// noise generator based on Galois LFSR
 	noise = (noise >> 1) ^ (-(noise & 1) & 0xB400u);	
 	noise8 = noise>>8;
 	
-	// Voice1
-	tempphase=phase0+osc[0].freq_coefficient; //0.88us
-	if(Sid.block.voice[0].ControlReg&NOISE)
-	{				
-		if((tempphase^phase0)&0x4000) sig0=noise8*osc[0].envelope;			
-	}
-	else
+	for(i = 0; i< 3; i++)
 	{
-		if(Sid.block.voice[0].ControlReg&RINGMOD)
+		j = (i == 0 ? 2 : i - 1);
+		tempphase=phase[i]+osc[i].freq_coefficient; //0.88us
+		if(Sid.block.voice[i].ControlReg&NOISE)
 		{				
-			if(phase2&0x8000) sig0=osc[0].envelope*-wave(&Sid.block.voice[0],phase0);
-			else sig0=osc[0].envelope*wave(&Sid.block.voice[0],phase0);
+			if((tempphase^phase[i])&0x4000) sig[i]=noise8*osc[i].envelope;			
 		}
-		else sig0=osc[0].envelope*wave(&Sid.block.voice[0],phase0); //2.07us
-	}
-	phase0=tempphase;
-
-	// Voice2
-	tempphase=phase1+osc[1].freq_coefficient; //0.88us
-	if(Sid.block.voice[1].ControlReg&NOISE)
-	{				
-		if((tempphase^phase1)&0x4000) sig1=noise8*osc[1].envelope;
-	}
-	else
-	{
-		if(Sid.block.voice[1].ControlReg&RINGMOD)
-		{				
-			if(phase0&0x8000) sig1=osc[1].envelope*-wave(&Sid.block.voice[1],phase1);
-			else sig1=osc[1].envelope*wave(&Sid.block.voice[1],phase1);
+		else
+		{
+			if(Sid.block.voice[i].ControlReg&RINGMOD)
+			{				
+				if(phase[j]&0x8000) 
+					sig[i]=osc[i].envelope*-wave(&Sid.block.voice[i],phase[i]);
+				else 
+					sig[i]=osc[i].envelope*wave(&Sid.block.voice[i],phase[i]);
+			}
+			else if(Sid.block.voice[i].ControlReg&SYNC)
+				{
+					if(tempphase < phase[j]) 
+						phase[i] = 0;
+				}
+				else sig[i]=osc[i].envelope*wave(&Sid.block.voice[i],phase[i]); //2.07us
 		}
-		else sig1=osc[1].envelope*wave(&Sid.block.voice[1],phase1); //2.07us
+		phase[i]=tempphase;
 	}
-	phase1=tempphase;
-
-	// Voice3
-	tempphase=phase2+osc[2].freq_coefficient; //0.88us
-	if(Sid.block.voice[2].ControlReg&NOISE)
-	{				
-		if((tempphase^phase2)&0x4000) sig2=noise8*osc[2].envelope;
-	}
-	else
-	{
-		if(Sid.block.voice[2].ControlReg&RINGMOD)
-		{				
-			if(phase1&0x8000) sig2=osc[2].envelope*-wave(&Sid.block.voice[2],phase2);
-			else sig2=osc[2].envelope*wave(&Sid.block.voice[2],phase2);
-		}
-		else sig2=osc[2].envelope*wave(&Sid.block.voice[2],phase2); //2.07us
-	}
-	phase2=tempphase;
 	
 	// voice filter selection
 	temp=0; // direct output variable
 	temp1=0; // filter output variable
-	if(Sid.block.RES_Filt&FILT1) temp1+=sig0;
-	else temp+=sig0;
-	if(Sid.block.RES_Filt&FILT2) temp1+=sig1;
-	else temp+=sig1;
-	if(Sid.block.RES_Filt&FILT3) temp1+=sig2;
-	else if(!(Sid.block.Mode_Vol&VOICE3OFF))temp+=sig2; // voice 3 with special turn off bit
+	if(Sid.block.RES_Filt&FILT1) temp1+=sig[0];
+	else temp+=sig[0];
+	if(Sid.block.RES_Filt&FILT2) temp1+=sig[1];
+	else temp+=sig[1];
+	if(Sid.block.RES_Filt&FILT3) temp1+=sig[2];
+	else if(!(Sid.block.Mode_Vol&VOICE3OFF))temp+=sig[2]; // voice 3 with special turn off bit
 
 	//filterOutput = IIR2((struct IIR_filter*)&filter04_06, filterInput);
 	//IIR2(filter04_06, temp1);
@@ -315,7 +290,7 @@ static void envelopes()
 	- calculate waveforms
 	
 ************************************************************************/
-SIGNAL (SIG_OUTPUT_COMPARE1A)
+ISR(TIMER1_COMPA_vect)
 {
 	OCR1A += SAMPLERATECOUNT; // Reload timer
 	waveforms(); //~22us
@@ -327,7 +302,7 @@ SIGNAL (SIG_OUTPUT_COMPARE1A)
 	- calculate attack decay release
 	
 ************************************************************************/
-SIGNAL (SIG_OUTPUT_COMPARE1B)
+ISR(TIMER1_COMPB_vect)
 {
 	OCR1B += MSCOUNT; // Reload timer
 	envelopes(); //~16us
@@ -339,7 +314,7 @@ SIGNAL (SIG_OUTPUT_COMPARE1B)
 	- set PWM output
 	
 ************************************************************************/
-SIGNAL (SIG_OVERFLOW2)
+ISR(TIMER2_OVF_vect)
 {
 #if defined(__AVR_ATmega8__)|| defined(__AVR_ATmega128__)
 	OCR2 = output; // Output to PWM

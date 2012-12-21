@@ -48,8 +48,8 @@
 
 // SID voice control register bits
 #define GATE (1<<0)
-#define SYNC (1<<1)		// not implemented
-#define RINGMOD (1<<2)	// implemented
+#define SYNC (1<<1)
+#define RINGMOD (1<<2)
 #define TEST (1<<3)		// not implemented
 #define TRIANGLE (1<<4)
 #define SAWTOOTH (1<<5)
