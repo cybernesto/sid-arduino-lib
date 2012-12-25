@@ -1,5 +1,5 @@
 /*
- SID.h - Atmega8 MOS6581 SID Emulator Version 1.9
+ SID.h - Atmega8 MOS6581 SID Emulator
  Copyright (c) 2007 Christoph Haberer, christoph(at)roboterclub-freiburg.de
  
  This library is free software; you can redistribute it and/or
@@ -29,14 +29,11 @@
 #define SUSTAINFACTOR ( MAXLEVEL / 15 )
 
 #define SAMPLEFREQ 16000L
-// OCR1A defines the sample frequency.
-#define SAMPLERATECOUNT (F_CPU/SAMPLEFREQ-1)
+#define SAMPLERATECOUNT (F_CPU/(8*SAMPLEFREQ)-1)
 
+#define ENVELOPE_FREQ 1000L  
+#define MSCOUNT (SAMPLEFREQ/ENVELOPE_FREQ-1)
 
-#define ENVELOPE_FREQ 1000L
-// OCR1B defines a 1ms interrupt.  
-#define MSCOUNT (F_CPU/ENVELOPE_FREQ-1) 
-//#define MSCOUNT 15999 
 
 // SID Registers
 #define VOICE1	0

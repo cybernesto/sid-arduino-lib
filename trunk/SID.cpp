@@ -1,5 +1,5 @@
 /*
- SID.cpp - Atmega8 MOS6581 SID Emulator Version 1.9
+ SID.cpp - Atmega8 MOS6581 SID Emulator
  Copyright (c) 2007 Christoph Haberer, christoph(at)roboterclub-freiburg.de
  
  This library is free software; you can redistribute it and/or
@@ -46,61 +46,11 @@
 
 	Hardware
 	
-	processor:	ATMEGA8, ATMEGA168 ( see #define )
+	processor:	ATMEGA8, ATMEGA168
 	clock:		16MHz Crystal
 
-	PIN17	PB1/OC2(A)		8Bit PWM sound output
-	PIN19	PB0				test LED ( till version 1.7 Pin 14 was used )
-
-****************************************************************************
-
-	date	authors					version		comment
-	======	======================	=======		==============================
-	Apr.07	(ch) Christoph Haberer	V1.0		First implemetation
-	Apr.22	(ch) Christoph Haberer	V1.2		some improvements
-	Apr.25	(ch) Christoph Haberer	V1.4		ATMEGA168 added
-	Jul.20	(ch) Christoph Haberer	V1.6		serial comunication
-	Jul.28	(ch) Christoph Haberer	V1.7		some bugs removed
-	Sep.28	(ch) Christoph Haberer	V1.8		additional gates
-	Nov.4 2012   Mario Patino       V1.9        arduino library conversion
-	
-	Versions:
-
-	V1.0
-	- 3 waveform generators
-	- 3 envelope generators with attack,decay, sustain, release
-	- waverforms: triangle, rectangle with variable pulse width,
-	  sawtooth, noise with variable frequency
-	- ring modulation 
-	- not implemented yet: prgrammable digital filter
-
-	V1.2
-	- some errors in the envelope generators removed
-	- sustain levels initialized to maximum =0x0F
-	- direct output/filter select bits implemented
-	- short delay comand "0xF3,time[ms]," included in scheduler 
-	
-	V1.4 
-	- ATMEGA168 added
-
-	V1.6
-	- serial comunication added, 9600 Baud, 
-	first Byte: adress, second byte register value
-
-	V1.8
-	- LED Pin changed to from Pin 14 to Pin19 to be Arduino compatibel
-	The Arduino has a dedicated LED resistor at PIN19
-	3 additional LEDs to show the state of the gates
-	
-	V1.9
-	- Encapsulated methods in a library to be able to use the SID directly 
-	in Arduino. 
-	- Removed unnecesary code
-	- Optimized timer usage to avoid the need of additional wiring
-	- Changed PWM output to Timer 2 OC2(A) to leave the 16bit timer 1 as 
-	a frequency generator for the 16kHz and 1kHz interrupts
-	- Changed the noise generator to a Galois LFSR
-	- Replaced the DDS wavetables with direct calculation to save RAM
+	PIN15	PB1/OC1A		8Bit PWM sound output
+	PIN19	PB0				test LED
 
 ***************************************************************************/
 
@@ -119,36 +69,38 @@ static Oscillator_t osc[OSCILLATORS];
 
 void initialize()
 {
-	// TIMER1 used to generate sample and ms interrupts
-	// TIMER1: Normal Mode
-	// TIMER2: no prescaling
-	TCCR1A = 0; 
-	TCCR1B = (1 << CS10);	
-	// TIMER1: set compare value to generate a 16kHz sample rate
-	OCR1A = SAMPLERATECOUNT;
-	// TIMER2: set compare value to generate a ms interrupt (1kHz)
-	OCR1B = MSCOUNT;
+	// TIMER1 used to generate sound output
+	// TIMER1: Fast PWM 8-bit
+	TCCR1A = (1 << WGM10) | (1 << COM1A1) ; 
+	// TIMER1: no prescaling
+	TCCR1B = (1 << WGM12) | (1 << CS10);	
 		
 #if defined(__AVR_ATmega8__)|| defined(__AVR_ATmega128__)
-	// for FAST PWM on OC2 
-	TCCR2 =  (1 << WGM21) | (1 << WGM20) | (1 << COM21) ;
-	// tmr2 running on MCU full speed clock
-	TCCR2 |= (1 << CS20);	
-	// interrupt mask register: enable timer2 overflow
-	TIMSK = (1 << TOIE2);
+	// TIMER2 used to generate sample and ms interrupts
+	// TIMER2: Normal Mode
+	TCCR2 = 0;
+	// TIMER2: clock/8 prescaling
+	TCCR2 |= (1 << CS21);
+	// TIMER2: set compare value to generate a 16kHz sample rate
+	OCR2 = SAMPLERATECOUNT;	
+	// interrupt mask register: enable timer2 OCR2A interrupt	
+	TIMSK = (1 << OCIE2);
 	
-	// interrupt mask register: enable timer1 OCR1A and OCR1B interrupts	
-	TIMSK |= (1 << OCIE1B) | (1 << OCIE1A);	
+	// interrupt mask register: enable timer1 overflow
+	TIMSK |= (1 << TOIE1);	
 #else
-	// for FAST PWM on OC2A 
-	TCCR2A = (1 << WGM21) | (1 << WGM20) | (1 << COM2A1) ;
-	// tmr2 running on MCU full speed clock 
-	TCCR2B = (1 << CS20);	
-	// interrupt mask register: enable timer2 overflow
-	TIMSK2 = (1 << TOIE2);
+	// TIMER2 used to generate sample and ms interrupts
+	// TIMER2: Normal Mode
+	TCCR2A = 0 ;
+	// TIMER2: clock/8 prescaling 
+	TCCR2B = (1 << CS21);
+	// TIMER2: set compare value to generate a 16kHz sample rate
+	OCR2A = SAMPLERATECOUNT;
+	// interrupt mask register: enable timer2 OCR2A interrupt
+	TIMSK2 = (1 << OCIE2A);
 	
-	// interrupt mask register: enable timer1 OCR1A and OCR1B interrupts	
-	TIMSK1 = (1 << OCIE1A) | (1 << OCIE1B);
+	// interrupt mask register: enable timer1 overflow	
+	TIMSK1 = (1 << TOIE1);
 #endif
 }
 
@@ -212,12 +164,16 @@ static void waveforms()
 				else 
 					sig[i]=osc[i].envelope*wave(&Sid.block.voice[i],phase[i]);
 			}
-			else if(Sid.block.voice[i].ControlReg&SYNC)
+			else 
+			{
+				if(Sid.block.voice[i].ControlReg&SYNC)
 				{
 					if(tempphase < phase[j]) 
 						phase[i] = 0;
 				}
-				else sig[i]=osc[i].envelope*wave(&Sid.block.voice[i],phase[i]); //2.07us
+				else 
+					sig[i]=osc[i].envelope*wave(&Sid.block.voice[i],phase[i]); //2.07us
+			}
 		}
 		phase[i]=tempphase;
 	}
@@ -285,51 +241,59 @@ static void envelopes()
 
 /************************************************************************
 
-	interrupt routine timer 1 16kHz
-	- calculate waverform phases
-	- calculate waveforms
-	
-************************************************************************/
-ISR(TIMER1_COMPA_vect)
-{
-	OCR1A += SAMPLERATECOUNT; // Reload timer
-	waveforms(); //~22us
-}
-
-/************************************************************************
-	
-	interrupt routine timer 1 1kHz
-	- calculate attack decay release
-	
-************************************************************************/
-ISR(TIMER1_COMPB_vect)
-{
-	OCR1B += MSCOUNT; // Reload timer
-	envelopes(); //~16us
-}
-
-/************************************************************************
-
-	interrupt routine timer 2 overflow 
+	interrupt routine timer 1 overflow
 	- set PWM output
 	
 ************************************************************************/
-ISR(TIMER2_OVF_vect)
+ISR(TIMER1_OVF_vect)
 {
-#if defined(__AVR_ATmega8__)|| defined(__AVR_ATmega128__)
-	OCR2 = output; // Output to PWM
-#else
-	OCR2A = output; // Output to PWM
-#endif	
+	OCR1A = output; // Output to PWM
 }
+
+
+/************************************************************************
+
+	interrupt routine timer 2 16kHz
+	- calculate waverform phases
+	- calculate waveforms
+	- calculate attack decay release (1kHz)
+	
+************************************************************************/
+#if defined(__AVR_ATmega8__)|| defined(__AVR_ATmega128__)
+ISR(TIMER2_COMP_vect)
+{
+	static uint8_t mscounter = 0;
+	OCR2 += SAMPLERATECOUNT; // Output to PWM
+	waveforms(); //~22us
+	
+	if(mscounter++ >= MSCOUNT)
+	{
+		envelopes(); //~16us
+		mscounter = 0;
+	}
+}
+#else
+
+ISR(TIMER2_COMPA_vect)
+{
+	static uint8_t mscounter = 0;
+	OCR2A += SAMPLERATECOUNT; // Output to PWM
+	waveforms(); //~36us
+	
+	if(mscounter++ >= MSCOUNT)
+	{
+		envelopes(); //~16us
+		mscounter = 0;
+	}
+}
+#endif	
 
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
 void SID::begin()
 {
-	// TIMER2: set OC2(A) to output
-	pinMode(11, OUTPUT);
+	pinMode(9, OUTPUT);
 	initialize();
 		
 	//initialize SID-registers	
