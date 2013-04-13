@@ -1,6 +1,7 @@
 /*
  SID.h - Atmega8 MOS6581 SID Emulator
  Copyright (c) 2007 Christoph Haberer, christoph(at)roboterclub-freiburg.de
+ Arduino Library Conversion by Mario Patino, cybernesto(at)gmail.com
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -106,7 +107,7 @@ class SID
   public:
 	void begin();
     uint8_t set_register(uint8_t regnum, uint8_t value);
-
+    uint8_t get_register(uint8_t regnum);
   // library-accessible "private" interface
   private:
     uint8_t get_wavenum(Voice_t *voice);

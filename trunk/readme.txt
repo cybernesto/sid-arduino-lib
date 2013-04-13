@@ -1,6 +1,8 @@
 MOS6581 SID Emulator Arduino Library
 
-This program tries to emulate the sound chip SID of the famous Commodore 64
+This library emulates the SID sound chip of the famous Commodore 64.
+It is based on the Atmega8 MOS6581 SID Emulator from Christoph Haberer.
+Library conversion and memory optimization by Mario Patino.
 
 Installation
 --------------------------------------------------------------------------------

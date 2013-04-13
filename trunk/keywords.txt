@@ -13,6 +13,7 @@ SID	KEYWORD1
 #######################################
 
 set_register	KEYWORD2
+get_register	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)

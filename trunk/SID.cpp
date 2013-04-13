@@ -1,7 +1,8 @@
 /*
  SID.cpp - Atmega8 MOS6581 SID Emulator
  Copyright (c) 2007 Christoph Haberer, christoph(at)roboterclub-freiburg.de
- 
+ Arduino Library Conversion by Mario Patino, cybernesto(at)gmail.com
+  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
@@ -324,6 +325,7 @@ void SID::begin()
 	case statement is used.
 	For instance: If setting the SID envelope register, new attach, decay
 	sustain times are calculated.
+	If an invalid register is requested the returned value will be 0.
 
 	4.2007 ch
 
@@ -331,7 +333,7 @@ void SID::begin()
 uint8_t SID::set_register(uint8_t regnum, uint8_t value)
 {
 	if(regnum>NUMREGISTERS-1) 
-		return 1;
+		return 0;
 		
 	Sid.sidregister[regnum]=value;
 
@@ -358,7 +360,22 @@ uint8_t SID::set_register(uint8_t regnum, uint8_t value)
 		case 19: setenvelope(&Sid.block.voice[2]);break;
 		case 20: setenvelope(&Sid.block.voice[2]);break;			
 	}	
-	return 0;
+	return 1;
+}
+
+/************************************************************************
+	
+	uint8_t get_sidregister(uint8_t regnum)
+
+	The registers of the virtual SID are read by this routine.
+	If an invalid register is requested it returns zero.
+
+************************************************************************/
+uint8_t SID::get_register(uint8_t regnum)
+{
+	if(regnum>NUMREGISTERS-1)
+		return 0;
+    return Sid.sidregister[regnum];
 }
 
 // Private Methods /////////////////////////////////////////////////////////////
