@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For Test
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SID	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+set_register	KEYWORD2
+get_register	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+GATE		LITERAL1
+SYNC		LITERAL1
+RINGMOD		LITERAL1
+TEST		LITERAL1
+TRIANGLE	LITERAL1
+SAWTOOTH	LITERAL1
+RECTANGLE	LITERAL1
+NOISE		LITERAL1
