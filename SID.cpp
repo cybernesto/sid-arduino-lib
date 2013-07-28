@@ -341,21 +341,21 @@ uint8_t SID::set_register(uint8_t regnum, uint8_t value)
 	{
 		//voice1
 		case 1:
-			osc[0].freq_coefficient=(Sid.sidregister[0]+(Sid.sidregister[1]<<8))>>2;
+			osc[0].freq_coefficient=((uint16_t)Sid.sidregister[0]+((uint16_t)Sid.sidregister[1]<<8))>>2;
 			break;
 		case 5: setenvelope(&Sid.block.voice[0]);break;
 		case 6: setenvelope(&Sid.block.voice[0]);break;
 		
 		//voice2
 		case 8:
-			osc[1].freq_coefficient=(Sid.sidregister[7]+(Sid.sidregister[8]<<8))>>2;
+			osc[1].freq_coefficient=((uint16_t)Sid.sidregister[7]+((uint16_t)Sid.sidregister[8]<<8))>>2;
 			break;
 		case 12: setenvelope(&Sid.block.voice[1]);break;
 		case 13: setenvelope(&Sid.block.voice[1]);break;		
 		
 		//voice3
 		case 15:
-			osc[2].freq_coefficient=(Sid.sidregister[14]+(Sid.sidregister[15]<<8))>>2;
+			osc[2].freq_coefficient=((uint16_t)Sid.sidregister[14]+((uint16_t)Sid.sidregister[15]<<8))>>2;
 			break;
 		case 19: setenvelope(&Sid.block.voice[2]);break;
 		case 20: setenvelope(&Sid.block.voice[2]);break;			
