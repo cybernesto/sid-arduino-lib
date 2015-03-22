@@ -244,7 +244,14 @@ static void envelopes()
 
 	interrupt routine timer 1 overflow
 	- set PWM output
-	
+
+GG: From http://www.avrfreaks.net/forum/tut-c-pwm-complete-idiots
+OCR1A is an output compare register. It is constantly compared with a timer, which generates a PWM pulse.
+The duty cycle of the PWM pulse is determined by the value of OCR1A. The PWM waveform is outputted to the OC1A pin.
+  
+From http://sphinx.mythic-beasts.com/~markt/ATmega-timers.html we got this table:
+   timer1A is pin 9   (11 on Mega)
+   timer1B is pin 10  (12 on Mega)	
 ************************************************************************/
 ISR(TIMER1_OVF_vect)
 {
