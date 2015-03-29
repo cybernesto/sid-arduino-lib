@@ -44,6 +44,12 @@
 #define ATTACKDECAY 5
 #define SUSTAINRELEASE 6
 
+// Stereo SID Addons
+#define VOICE1_Right 0
+#define VOICE3_Right 14
+#define VOICE2_Left  7
+
+
 // SID voice control register bits
 #define GATE (1<<0)
 #define SYNC (1<<1)

@@ -2,7 +2,9 @@
  SID.cpp - Atmega8 MOS6581 SID Emulator
  Copyright (c) 2007 Christoph Haberer, christoph(at)roboterclub-freiburg.de
  Arduino Library Conversion by Mario Patino, cybernesto(at)gmail.com
-  
+ 2015 Stereo capability added by Giovanni Giorgi, jj(at)gioorgi.com
+
+
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
@@ -42,6 +44,15 @@
 
 	The amplitude value is output as an 8Bit PWM value. 
 	The PWM-Output may be directly connected to an audio amplifier.
+
+Giovanni Giorgi Stereo Add on
+
+Simply put, the SID Voice2 is redirected to the PWM pin 10 (on ArduinoUno).
+No additional load is expected/required
+Is up to the client to know how to use this stereo capability.
+
+
+
 	
 ************************************************************************
 
@@ -64,18 +75,37 @@
 const static uint16_t AttackRate[16]={2,4,16,24,38,58,68,80,100,250,500,800,1000,3000,5000,8000};
 const static uint16_t DecayReleaseRate[16]={6,24,48,72,114,168,204,240,300,750,1500,2400,3000,9000,15000,24000};
 	
-static uint8_t output;
+static uint8_t rightOutput;   // pin9
+static uint8_t leftOutput;    // pin 10 GG Addon for StereoSID
 static Sid_t Sid;
 static Oscillator_t osc[OSCILLATORS];
-
+/**
+ * Initialize Arduino Register. Take control of Timer 1 and Timer 2.
+ * Timer 1 will be used for PWM output (aka Analog-approximation)
+ * Timer 2 will be used to compute output based on status of SID registers
+ * 
+ * OCR1A is an output compare register. It is constantly compared with a timer, which generates a PWM pulse.
+ * The duty cycle of the PWM pulse is determined by the value of OCR1A. The PWM waveform is outputted to the OC1A pin.
+ *
+ * timer1A is pin 9   (11 on Mega)
+ * timer1B is pin 10  (12 on Mega)	
+ * Reference http://arduino.cc/en/Tutorial/SecretsOfArduinoPWM
+ * for explanation of usage of _BV(COM1B1)
+ * Additional information on 
+ + http://www.avrfreaks.net/forum/tut-c-pwm-complete-idiots
+ + http://sphinx.mythic-beasts.com/~markt/ATmega-timers.html
+ + http://www.avrfreaks.net/forum/tut-c-newbies-guide-avr-pwm-incomplete?name=PNphpBB2&file=viewtopic&t=68302 
+*/
 void initialize()
 {
 	// TIMER1 used to generate sound output
 	// TIMER1: Fast PWM 8-bit
-	TCCR1A = (1 << WGM10) | (1 << COM1A1) ; 
+        TCCR1A = (1 << WGM10) | (1 << COM1A1) /** GG ADDED the following to enable pin 10 --> */ | _BV(COM1B1); 
 	// TIMER1: no prescaling
 	TCCR1B = (1 << WGM12) | (1 << CS10);	
-		
+        // ?  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
+        
+        
 #if defined(__AVR_ATmega8__)|| defined(__AVR_ATmega128__)
 	// TIMER2 used to generate sample and ms interrupts
 	// TIMER2: Normal Mode
@@ -135,9 +165,11 @@ static int8_t wave(Voice_t *voice, uint16_t phase)
 	return out;
 }
 
+static uint8_t  remapDirectFilter(uint16_t temp, uint16_t temp1);
+
 static void waveforms()
 {
-	static uint16_t phase[3], sig[3];
+	static uint16_t phase[OSCILLATORS], sig[OSCILLATORS];
 	static int16_t temp,temp1;
 	static uint8_t i,j,k;
 	static uint16_t noise = 0xACE1;
@@ -148,7 +180,7 @@ static void waveforms()
 	noise = (noise >> 1) ^ (-(noise & 1) & 0xB400u);	
 	noise8 = noise>>8;
 	
-	for(i = 0; i< 3; i++)
+	for(i = 0; i< OSCILLATORS; i++)
 	{
 		j = (i == 0 ? 2 : i - 1);
 		tempphase=phase[i]+osc[i].freq_coefficient; //0.88us
@@ -184,24 +216,41 @@ static void waveforms()
 	temp1=0; // filter output variable
 	if(Sid.block.RES_Filt&FILT1) temp1+=sig[0];
 	else temp+=sig[0];
-	if(Sid.block.RES_Filt&FILT2) temp1+=sig[1];
-	else temp+=sig[1];
-	if(Sid.block.RES_Filt&FILT3) temp1+=sig[2];
+
+        {
+          uint16_t directVoice2=0, filterVoice2=0;
+          if(Sid.block.RES_Filt&FILT2) filterVoice2+=sig[1];
+          else directVoice2+=sig[1];
+          // VOICE2 Only
+          leftOutput= remapDirectFilter( directVoice2, filterVoice2);
+        }
+        
+        if(Sid.block.RES_Filt&FILT3) temp1+=sig[2];
 	else if(!(Sid.block.Mode_Vol&VOICE3OFF))temp+=sig[2]; // voice 3 with special turn off bit
 
 	//filterOutput = IIR2((struct IIR_filter*)&filter04_06, filterInput);
 	//IIR2(filter04_06, temp1);
-	k=(temp>>8)+128;
-	k+=temp1>>10; // no real filter implemeted yet
-	
-	output = k; // Output to PWM
-}
 
+        k=remapDirectFilter(temp,temp1);
+        
+
+        // Output to PWM:
+	rightOutput = k;
+
+}
+/** GG: This class merges direct and filter-ed output, anyway
+ *      no real filter is implemented.
+ */
+static uint8_t  remapDirectFilter(uint16_t temp, uint16_t temp1){
+  uint8_t k=(temp>>8)+128;
+  k+=temp1>>10; // no real filter implemeted yet
+  return k;
+}
 
 static void envelopes()
 {
 	uint8_t n;
-	uint8_t controll_regadr[3]={4,11,18};
+	uint8_t controll_regadr[OSCILLATORS]={4,11,18};
 	// if gate is ONE then the attack,decay,sustain cycle begins
 	// if gate switches to zero the sound decays
 	for(n=0;n<OSCILLATORS;n++)
@@ -245,17 +294,12 @@ static void envelopes()
 	interrupt routine timer 1 overflow
 	- set PWM output
 
-GG: From http://www.avrfreaks.net/forum/tut-c-pwm-complete-idiots
-OCR1A is an output compare register. It is constantly compared with a timer, which generates a PWM pulse.
-The duty cycle of the PWM pulse is determined by the value of OCR1A. The PWM waveform is outputted to the OC1A pin.
-  
-From http://sphinx.mythic-beasts.com/~markt/ATmega-timers.html we got this table:
-   timer1A is pin 9   (11 on Mega)
-   timer1B is pin 10  (12 on Mega)	
+
 ************************************************************************/
 ISR(TIMER1_OVF_vect)
 {
-	OCR1A = output; // Output to PWM
+	OCR1A = rightOutput; // Output to PWM
+        OCR1B = leftOutput;
 }
 
 
@@ -302,6 +346,7 @@ ISR(TIMER2_COMPA_vect)
 void SID::begin()
 {
 	pinMode(9, OUTPUT);
+        pinMode(10, OUTPUT);
 	initialize();
 		
 	//initialize SID-registers	
