@@ -114,7 +114,15 @@ class SID
 	void begin();
     uint8_t set_register(uint8_t regnum, uint8_t value);
     uint8_t get_register(uint8_t regnum);
-  // library-accessible "private" interface
+    void playTestIntro();
+  // GG: Addon facilities
+  void loadPiano(uint8_t voice);
+  void configVoice(uint8_t voice, uint8_t waveform, uint16_t pulsewidth /*12bit*/, uint8_t attackDecay, uint8_t sustainRelease, uint8_t releasePoint);
+
+  uint16_t  midi2Sid(int midin);
+  void play(byte voice, uint16_t freq);
+  
+  // library-accessible "private" interface  
   private:
     uint8_t get_wavenum(Voice_t *voice);
 	void setfreq(Voice_t *voice,uint16_t freq);
