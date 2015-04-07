@@ -120,7 +120,7 @@ class SID
   void configVoice(uint8_t voice, uint8_t waveform, uint16_t pulsewidth /*12bit*/, uint8_t attackDecay, uint8_t sustainRelease, uint8_t releasePoint);
 
   uint16_t  midi2Sid(int midin);
-  void play(byte voice, uint16_t freq);
+  void play(uint8_t voice, uint16_t freq);
   
   // library-accessible "private" interface  
   private:

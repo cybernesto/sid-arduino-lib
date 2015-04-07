@@ -471,8 +471,10 @@ void SID::setenvelope(Voice_t *voice)
 
 uint16_t  SID::midi2Sid(int midin){
   // NOTE_D03 --> 131
-  // C3  130.81	2195
-  //return midi2FreqOLD(midin)/0.0596;
+  // C3    130.81	2195
+  // 440hz = A4 = 0x1CD6
+  // MIDI    A4  = 81
+  // return midi2FreqOLD(midin)/0.0596;
   /*
  */
   switch(midin){
@@ -493,7 +495,7 @@ uint16_t  SID::midi2Sid(int midin){
     }
 }
 
-void SID::play(byte voice, uint16_t freq){
+void SID::play(uint8_t voice, uint16_t freq){
   byte low = freq & 0x00FF;
   byte high= freq >>8;
   set_register(voice+0,low);
