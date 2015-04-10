@@ -469,30 +469,14 @@ void SID::setenvelope(Voice_t *voice)
 	osc[n].m_release=(osc[n].level_sustain)/DecayReleaseRate[voice->SustainRelease&0x0F];
 }
 
-uint16_t  SID::midi2Sid(int midin){
-  // NOTE_D03 --> 131
-  // C3    130.81	2195
-  // 440hz = A4 = 0x1CD6
-  // MIDI    A4  = 81
-  // return midi2FreqOLD(midin)/0.0596;
-  /*
- */
-  switch(midin){
-  case 60:return 0x122A;  // C4$	277.18	4650	122A 
-  case 61:return 0x133F;  
-  case 62:return 0x1464;  
-  case 63:return 0x159A;
-  case 64:return 0x16E3; 
-  case 65:return 0x183F;  // FA
-  case 66:return 0x1981;
-  case 67:return 0x1B38;
-  case 68:return 0x1CD6;
-  case 69:return 0x1E80;
-  case 70:return 0x205E;
-  case 71:return 0x224B; // 
-  case 72:return 0x2455; // C5$	554.37	9301	2455
-  default:return 0x0;
-    }
+
+// Include a set of midi constant like
+// const uint8_t A4=81; 440Hz
+#include "midi_support.h"
+
+
+uint16_t  SID::midi2Sid(uint8_t midin){
+  return midin <=127 ? MIDI::midi2sidMapper[ midin ]:0;
 }
 
 void SID::play(uint8_t voice, uint16_t freq){
@@ -526,6 +510,8 @@ void SID::loadPiano(uint8_t voice){
 
 }
 
+
+
 /** Fast way of configuring a voice,  ADSR included. 
     ReleasePoint is unimplemented. 
     It seems how much 1/60 of seconds the note will last.
@@ -551,19 +537,33 @@ void SID::playTestIntro() {
   loadPiano(VOICE2_Left);
   loadPiano(VOICE3);
   set_register(24,15); // MAX VOLUME
-  // play a tadalike
-  play(VOICE1,midi2Sid(60 /*DO*/));
-  delay(200);
-  play(VOICE2,midi2Sid(62 /*RE*/));
-  delay(200);
-  play(VOICE1,0);
-  play(VOICE2,0);
-  // Hmmm Too voice seems distort on piezo...time to aplify better?
-  play(VOICE1, midi2Sid(64 /*MI*/));
-  delay(250);
-  play(VOICE1,0);
-  play(VOICE2, midi2Sid(60 /*DO*/));
-  delay(250);  
+
+  uint8_t i;
+  for(i=MIDI::nC3; i<=MIDI::nC6; i+=2){
+    
+    play(VOICE1,midi2Sid(i));
+    play(VOICE2,midi2Sid(MIDI::nA4));
+    delay(90);
+    play(VOICE2,midi2Sid(MIDI::nG4));
+    play(VOICE1,midi2Sid(i+1));
+    delay(90);
+    //play(VOICE3,midi2Sid(MIDI::nD5));
+    //delay(50);    
+  } 
+
+  // // play a tadalike
+  // play(VOICE1,midi2Sid(60 /*DO*/));
+  // delay(200);
+  // play(VOICE2,midi2Sid(62 /*RE*/));
+  // delay(200);
+  // play(VOICE1,0);
+  // play(VOICE2,0);
+  // // Hmmm Too voice seems distort on piezo...time to aplify better?
+  // play(VOICE1, midi2Sid(64 /*MI*/));
+  // delay(250);
+  // play(VOICE1,0);
+  // play(VOICE2, midi2Sid(60 /*DO*/));
+  // delay(250);  
   play(VOICE3,0); 
   play(VOICE2,0); 
   play(VOICE1,0); 
