@@ -5,6 +5,10 @@ It is based on the Atmega8 MOS6581 SID Emulator from Christoph Haberer.
 Library conversion and memory optimization by Mario Patino.
 Stereo Effect by Giovanni Giorgi
 
+Take a look also at
+https://github.com/farvardin/C64-music/tree/master/sid_arduino
+for a dump of common-used musics
+
 
 Installation
 --------------------------------------------------------------------------------
