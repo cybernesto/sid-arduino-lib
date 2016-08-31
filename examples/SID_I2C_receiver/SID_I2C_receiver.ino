@@ -49,3 +49,7 @@ void receiveEvent(int howMany)
     Serial.println(val);
   }
 }
+// Local variables:
+// mode: c++
+// mode: auto-complete
+// End:

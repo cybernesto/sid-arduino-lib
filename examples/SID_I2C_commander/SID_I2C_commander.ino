@@ -116,3 +116,8 @@ void loop()
   myRemoteSID.playTestIntro();
   delay(2000);
 }
+
+// Local variables:
+// mode: c++
+// mode: auto-complete
+// End:
