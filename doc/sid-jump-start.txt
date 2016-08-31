@@ -1,0 +1,52 @@
+# This is an emacs-org-mode files. To edit it please use emacs org-mode
+  
+* The super minimal SID manual
+This manual has taken information on wikipedia and from this html page
+which reproduce the original datasheet[fn:1].
+
+For better performance, it is suggested to use an arduino uno as a
+I2C-connected SID emulator.
+
+** Let's Start
+/The 6581 Sound Interface Device (SID) is a single-chip, 8-bit  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families/
+
+The SID has been part of the C/64 success.
+
+This arduino emulation library divert Voice2 to another pin, to enable a
+"Stero" effect somewhat.
+
+Connect pin9 and pin 10 to two piezo speaker, and the other side to
+the ground.
+
+The suggested setup is to have an arduino as a SID, driven via
+I2C. The I2C protocol is a 16bit simple protocol: register, value.
+
+The 6581 consists of three synthesizer “voices” which can be used
+independently or in conjunction to create complex sounds. 
+Each voice consists of a Tone Oscillator/Waveform Generator, an
+Envelope Generator and an Amplitude Modulator.
+The Envelope Generator is controlled via an ADSR (Attack Decay Sustain
+Release)  configuration.
+
+[[./sid-registers.png]]
+* Reference
+
+
+
+* Config :noexport:
+
+#+OPTIONS: num:5 whn:5 toc:5 H:6
+#+OPTIONS: ^:nil
+#+STARTUP: indent showstars
+
+# Local variables:
+# mode: org
+# mode: visual-line
+# after-save-hook: org-twbs-export-to-html
+# End:
+
+* Footnotes
+
+[fn:1]  http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet
+
+

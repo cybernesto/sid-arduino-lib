@@ -37,4 +37,16 @@ select SID.  This will add a corresponding line to the top of your sketch:
 
 To stop using this library, delete that line from your sketch.
 
+Using the stero effect
+--------------------------------------------------------------------------------
+
+ The  pin9 is used for  Voice1, Voice3
+ The pin10 is used for Voice2
+
+So, the SID Voice2 is redirected to the PWM pin 10 (on ArduinoUno).
+No additional load is expected/required
+Is up to the client to know how to use this stereo capability.
+A small manual is included in the doc/ folder
+
+
 
