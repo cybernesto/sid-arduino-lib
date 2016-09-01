@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <title>sid-jump-start</title>
-<!-- 2016-08-31 mer 19:09 -->
+<!-- 2016-09-01 Thu 22:20 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
+<meta name="author" content="Giovanni Giorgi">
 
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -211,26 +212,18 @@ I2C-connected SID emulator.
 <h3 id="sec-1-1"><span class="section-number-3">1.1</span> Let's Start</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-<i>The 6581 Sound Interface Device (SID) is a single-chip, 8-bit  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families</i>
+<i>The 6581 Sound Interface Device (SID) is a single-chip,  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families</i>
 </p>
 
 <p>
-The SID has been part of the C/64 success.
+The <a href="https://en.wikipedia.org/wiki/MOS_Technology_SID">SID</a> has been part of the C/64 success.
 </p>
 
 <p>
 This arduino emulation library divert Voice2 to another pin, to enable a
 "Stero" effect somewhat.
-</p>
-
-<p>
 Connect pin9 and pin 10 to two piezo speaker, and the other side to
 the ground.
-</p>
-
-<p>
-The suggested setup is to have an arduino as a SID, driven via
-I2C. The I2C protocol is a 16bit simple protocol: register, value.
 </p>
 
 <p>
@@ -241,6 +234,43 @@ Envelope Generator and an Amplitude Modulator.
 The Envelope Generator is controlled via an ADSR (Attack Decay Sustain
 Release)  configuration.
 </p>
+
+<p>
+When a mechanical musical instrument produces sound, the Loudness of
+the sound produced changes over time in a way that varies from
+instrument to instrument. When a pipe organ's key is pressed, for
+example, it plays a note at constant volume; the sound dies quickly
+when the key is released. 
+By contrast, the sound of a guitar is
+loudest immediately after a string is plucked, and quickly fades. 
+</p>
+
+<p>
+A synthesizer's ADSR envelope is a way to tailor the timbre for the
+synth, sometimes to make it sound more like a mechanical instrument. 
+A quick attack with little decay helps it sound more like an organ; a
+longer decay and zero sustain makes it sound more like a guitar. While
+envelopes are most often applied to volume, they are also commonly
+used to control other sound elements, such as filter frequencies or
+oscillator pitches.
+</p>
+
+<p>
+Today modern synthesizers use samples to reproduce sound with a strong
+accuracy. 
+But in  1982, ADSR was a state-of-the-art for a music chip.
+</p>
+
+<p>
+For more information look at <a href="http://en.wikiaudio.org/ADSR_envelope">http://en.wikiaudio.org/ADSR_envelope</a>
+</p>
+
+<p>
+<i>The suggested setup is to have an arduino as a SID, driven via I2C (see examples)</i> 
+The I2C protocol in the example is very easy: send two bytes, one for
+the reguster and the second fo the value to store inside.
+</p>
+
 
 
 <figure>
@@ -277,7 +307,8 @@ Release)  configuration.
 </nav>
 </div></div></div>
 <footer id="postamble" class="">
-<div><p class="date">Created: 2016-08-31 mer 19:09</p>
+<div><p class="author">Author: Giovanni Giorgi</p>
+<p class="date">Created: 2016-09-01 Thu 22:20</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org-mode</a> 8.2.10)</p>
 </div>
 </footer>

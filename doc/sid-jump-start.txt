@@ -8,18 +8,14 @@ For better performance, it is suggested to use an arduino uno as a
 I2C-connected SID emulator.
 
 ** Let's Start
-/The 6581 Sound Interface Device (SID) is a single-chip, 8-bit  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families/
+/The 6581 Sound Interface Device (SID) is a single-chip,  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families/
 
-The SID has been part of the C/64 success.
+The [[https://en.wikipedia.org/wiki/MOS_Technology_SID][SID]] has been part of the C/64 success.
 
 This arduino emulation library divert Voice2 to another pin, to enable a
 "Stero" effect somewhat.
-
 Connect pin9 and pin 10 to two piezo speaker, and the other side to
 the ground.
-
-The suggested setup is to have an arduino as a SID, driven via
-I2C. The I2C protocol is a 16bit simple protocol: register, value.
 
 The 6581 consists of three synthesizer “voices” which can be used
 independently or in conjunction to create complex sounds. 
@@ -28,12 +24,39 @@ Envelope Generator and an Amplitude Modulator.
 The Envelope Generator is controlled via an ADSR (Attack Decay Sustain
 Release)  configuration.
 
+When a mechanical musical instrument produces sound, the Loudness of
+the sound produced changes over time in a way that varies from
+instrument to instrument. When a pipe organ's key is pressed, for
+example, it plays a note at constant volume; the sound dies quickly
+when the key is released. 
+By contrast, the sound of a guitar is
+loudest immediately after a string is plucked, and quickly fades. 
+
+A synthesizer's ADSR envelope is a way to tailor the timbre for the
+synth, sometimes to make it sound more like a mechanical instrument. 
+A quick attack with little decay helps it sound more like an organ; a
+longer decay and zero sustain makes it sound more like a guitar. While
+envelopes are most often applied to volume, they are also commonly
+used to control other sound elements, such as filter frequencies or
+oscillator pitches.
+
+Today modern synthesizers use samples to reproduce sound with a strong
+accuracy. 
+But in  1982, ADSR was a state-of-the-art for a music chip.
+ 
+For more information look at [[http://en.wikiaudio.org/ADSR_envelope]]
+
+/The suggested setup is to have an arduino as a SID, driven via I2C (see examples)/ 
+The I2C protocol in the example is very easy: send two bytes, one for
+the reguster and the second fo the value to store inside.
+
+
 [[./sid-registers.png]]
 * Reference
 
 
 
-* Config :noexport:
+* Config                                                           :noexport:
 
 #+OPTIONS: num:5 whn:5 toc:5 H:6
 #+OPTIONS: ^:nil
