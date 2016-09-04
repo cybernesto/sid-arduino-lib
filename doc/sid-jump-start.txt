@@ -52,6 +52,73 @@ the reguster and the second fo the value to store inside.
 
 
 [[./sid-registers.png]]
+* How to convert midi files and play them on Stereo Sid
+MIDI file are a very old standard which fit more or less in the Sid.
+MIDI specification is 127 note wide, whereas SID has 94 possibilites.
+MIDI support a bit more notes.
+Stereo Sid provide you a midi2Sid function to remap a 8bit Midi note
+to a 16bit SID register spec.
+The function will emit a silence for all notes the SID cannot play.
+/SID playable MIDI range is 25-118./
+To convert it we used the 440hz (A4) center (midi 81,  0x1CD6 on SID).
+** Setup
+Because midi can generate only 3 voices at a time, you should edit
+your midi with some program like AriaMaestosa 
+(http://ariamaestosa.sourceforge.net/) to be sure it fits nicely in
+your SID.
+This step is not necessary but it will simplify your track exporting
+and dumping
+** Compile midicsv
+Download and compile midicsv from
+http://www.fourmilab.ch/webtools/midicsv/  
+Midicsv is a very good tool and will save your day
+** Simple approach
+A simple approach is to extract 3 tracks from a midi and generate three
+simple C source arrays to push in a player sketch.
+Midicsv dump the single note like
+ =Track, Time, Note_on_c, Channel, Note, Velocity=
+Read midicsv manual for more information.
+
+With this command
+#+BEGIN_SRC sh
+./midicsv  doremifasolasido.mid  | egrep ^2 | egrep Note_on_c |cut -d , -f 5,2
+#+END_SRC
+you can extract a list of  { duration, note } for track 2.
+We track down /only/ the note start for every track (it is a
+over-simplification). 
+The key idea is to have three "queue" with a pointer to the current
+note and a global time counter.
+after pushing 3 notes, we increment the clock and play the next note
+when is the right time.
+
+The empire_player.ino demo will show you this in practice.
+
+
+
+* Drums: SID Configuration 
+Take a look at 
+http://www.lyonlabs.org/commodore/stereo-sid/qlink/half-moon-lake-patches-v1.txt
+for more ADSR patterns
+
+**    Viola/Strings
+    -------------
+    Waveform:      Sawtooth
+    Attack:        9
+    Decay:         0
+    Sustain:       12
+    Release:       8
+    Release Point: 0
+
+**   Pipe Organ
+
+    Waveform:      Pulse
+    Pulse Width:   2000   Reg 2/3 (12 bit però)
+                          PWout = (PWnReg/40.95) %
+    Attack:        3
+    Decay:         6
+    Sustain:       6
+    Release:       3
+    Release Point  3
 * Reference
 
 

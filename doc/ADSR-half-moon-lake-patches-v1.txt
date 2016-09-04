@@ -1,0 +1,362 @@
+          The Half Moon Lake SID Patch Collection
+          ---------------------------------------
+
+For many people, the hardest part of transcribing a SID song is finding the right Attack, Decay, Sustain, and Release (ADSR) envelope patch for their SID.  As a public service, the SID community of HALF MOON LAKE BBS has joined together in an effort to prepare an introduction to ADSR patches for SID songs.
+
+Before I continue, I would like to thank Paul Labeaud, The Trooper, Paul Trauth, Jeff Olsen, and Joe Grau for contributing patches, comments, and advice to this collection.  And a "special" thank you to Jabba Hutt and his partner in crime, Bobbye, for making a promise that I ended up keeping for them.  <grin>.
+
+Now for the disclaimer.  Quite frankly, it's near impossible to exactly duplicate a particular sound on the SID chip.  You can try and get a reasonable approximation of most instruments, sometimes.  And what might sound good on one SID chip may not sound quite the same on another due to the loose manufacturing specs of the SID chip.  This is especially true when using the filters.
+
+The SID patches that follow are not etched in stone, but are examples for you to experiment with.  Tinker with the patches until they sound right to you on your SID chip.  Add to or subtract from the various values in the ADSR patch to produce different patches.  Several of the examples in this collection illustrate how modest changes can result in different sounds.
+
+Be aware that the sound produced by particular patches can be affected very strongly by the tempo of the song and the note durations.  What sounds great with eighth notes at 100 could be a disaster with 16ths at 150.  No single patch is going to work for every song.  Which is why a collection of patches is needed.
+
+Some envelopes are very sensitive to pitch.  For some reason, patches using the Pulse Wave in octaves 0, 1, and some of 2 can sound out of tune.  The Triangle Wave can become too shrill in the octaves 6 and 7.  Be careful and forewarned.  One solution is to Transpose the offending notes into a different octave.  Another is to temporarily modify the patch while the notes are in that range.  There is no rule that a single ADSR patch must last the entire song for each voice.
+
+Many SIDarrangers will not use the filter commands due to the differences from machine to machine.  However, always set F-X "on" as this command filters out some of the background noise the SID chip picks up from the computer circuitry.  It can make a big difference on some 64s and does not effect the quality of the patch.  Also, the SID chip is designed to filter only one voice at a time.  Unless you are trying to achieve some special effect, do not filter two voices at once.
+
+Be careful to never let two voices using the same waveform play notes of the exact same pitch at the very same time.  Detune one of the voices for a more harmonic effect.  You can also make a slight change (like add or subtract 1) to the Sustain and Release values of one voice to make a richer, fuller sound.
+
+It's been recommended previously not to use Attack = 0 for all 3 voices at the same time.  Some SID chips cannot quite handle it and you get one voice sounding slightly off-beat.  Setting Attack = 1 seems to resolve this problem.
+
+To quote Craig Chamberlain directly, "Don't overlook the subtle but significant effects that different envelope settings can have on a song.  Envelopes seem to be one of the most ignored aspects of songs."  And yet it is one of the least documented areas of SIDwriting.  Don't always be satisfied with the first patch that sounds alright for your SID.  Try some different waveforms and experiment.
+
+Now for the Introductory ADSR patch collection, Volume 1...
+
+
+------------------------
+Paul's Funky Bass Guitar
+------------------------
+
+If you don't like fooling around with filters, you can eliminate it and it still sounds funky.
+
+Waveform:      Pulse
+Pulse Width:   1800
+Attack:        0
+Decay:         10
+Sustain:       0
+Release:       10
+Release Point: 2
+Filter:        Yes
+Filter Mode:   L
+Resonance:     10
+Autofilter:    10
+
+
+------------------
+Whispering Harmony
+------------------
+
+You can use this envelope when you want a voice to be heard, but not as overpowering as the rest.
+
+Waveform:      Sawtooth
+Attack:        2
+Decay:         10
+Sustain:       8
+Release:       10
+Release Point: 2
+
+
+------------------
+Harry Bratt's Drum
+------------------
+
+This drum sounds good in the first and second octave.  You need to insert the ABSolute Set Pitch command before every note to be played by the drum, but in an octave higher.  Refer to your manual for precise instructions on using ABS.
+
+Waveform:      Pulse
+Pulse Width:   2048
+Pulse Sweep:   20
+Attack:        0
+Decay:         8
+Sustain:       0
+Release:       8
+Release Point: 1
+Vib. Depth:    3
+Vib. Rate:     2
+Portamento:    85-90
+
+
+---------------------
+Castle Music Envelope
+---------------------
+
+This envelope sounds like it should go with any medieval or castle music you may have lying around.
+
+Waveform:      Triangle/Pulse
+Pulse Width:   2048
+Attack:        0
+Decay:         10
+Sustain:       8
+Release:       10
+Release Point: 2
+
+
+-----
+Organ
+-----
+
+For an organ sound, try this one.  Vary the Pulse Width to range the sound from a full Church organ to more of a hurdy-gurdy sound.  It is sensitive to note duration.
+
+Waveform:      Pulse
+Pulse Width:   1000
+Attack:        5
+Decay:         15
+Sustain:       0
+Release:       12
+Release Point: 2
+
+
+---------------------------
+John Roache's Ragtime Piano
+---------------------------
+
+For a good ragtime piano sound, try this tested and true envelope.
+
+Waveform:      Pulse
+Pulse Width:   1500
+Attack:        2
+Decay:         9
+Sustain:       1
+Release:       1
+Release Point: 1
+
+
+----------
+Soft Bells
+----------
+
+Two voices playing the same notes sound good with this one.  Works well with classical music.
+
+               Voice 1       Voice 2
+Waveform:      Triangle      Triangle
+Attack:        0             1
+Decay:         10            10
+Sustain:       0             0
+Release:       10            10
+Filter:        Yes           No
+Filter Mode:   L             -
+Resonance:     10            -
+Autofilter     -10           -
+Detune         0             10
+
+
+-----------------------------
+The Trooper's Metallic Guitar
+-----------------------------
+
+Looking for that right sound for your heavy metal composition?
+
+Waveform:      Sawtooth
+Attack:        0
+Decay:         7
+Sustain:       9
+Release:       7
+Release Point: 1
+Pulse Sweep:   10 - 15
+
+
+-------------
+A Classic Duo
+-------------
+
+For some classical songs, this pair of voices works quite well.  They work best when used with Voice 1 and 2 both playing Treble notes.  For songs that repeat measures, switch the envelopes to play the other's notes for a different sound, then back again when new measures start, to add a litle contrast to the song.
+
+               Voice 1       Voice 2
+Waveform:      Triangle      Triangle
+Attack:        5             9
+Decay:         10            13
+Sustain:       12            0
+Release:       13            15
+Release Point: 1             1
+
+
+----------------
+A Nice Bass Line
+----------------
+
+One of the hardest things to do with some songs is finding a good envelope for the bass line.  Here's one that has proven successful in the past.  You'll probably have to adjust the Sustain and Release values to make it work for your note duration and tempo.
+
+Waveform:      Pulse
+Pulse Width:   1800
+Attack:        1
+Decay:         10
+Sustain:       1
+Release:       10
+Release Point: 1
+Filter:        Yes
+Filter Mode:   L
+Resonance:     11
+Autofilter:    -10
+
+
+--------------
+Bass Drum Line
+--------------
+
+Again, this drum requires setting the ABSolute Set Pitch command prior to each note in the bass line.  This one is recommended to be set two octaves higher than the actual note.
+
+Waveform:      Pulse
+Pulse Width:   2042
+Attack:        1
+Decay:         8
+Sustain:       11
+Release:       0
+Release Point: 1
+Portamento:    250
+
+
+---------
+Flute-oid
+---------
+
+For a different lilting sound, try this one.
+
+Waveform:      Sawtooth
+Attack:        1
+Decay:         4
+Sustain:       14
+Release:       5
+Release Point: 1
+Vib. Depth:    30
+Vib. Rate:     1
+
+
+----------------
+A Midnight Piano
+----------------
+
+A nice piano sound.  Works well if a second voice plays the same notes when detuned 10 to 20.
+
+Waveform:      Pulse
+Pulse Width:   2700
+Attack:        2
+Decay:         11
+Sustain:       5
+Release:       0
+Release Point: 3
+
+
+-----------------
+DC Star's Snapper
+-----------------
+
+This one is a little hard to describe.  It makes for a great bass counterpoint when the tempo and note durations are just right.  Adds just a little something extra to a song.
+
+Waveform:      Noise
+Attack:        0
+Decay:         8
+Sustain:       0
+Release:       6
+Release Point: 4
+
+
+----------------------
+Joe Grau's Harpsichord
+----------------------
+
+This set of voices will emulate a harpsichord.  Be sure to detune Voice 2.  Tinker with the Pulse Widths for different sounds.  Values from 100 to 750 seems to work best.
+
+               Voice 1 & 2   Voice 3
+Waveform:      T/P           T/P
+Pulse Width:   500           650
+Pulse Sweep:   8             8
+Attack:        0             0
+Decay:         12            11
+Sustain:       0             0
+Release:       10            9
+Release Point: 1             1
+Filter:        -             Yes
+Filter Mode:   -             L
+Filter Cutoff: -             1800
+Resonance:     -             15
+
+
+---------------------
+Madrigals and Chorals
+---------------------
+
+This one has been used successfully on a number of madrigals and choral music.  Be sure on voice 1 to TranSPose 12.
+
+               Voice 1 & 2   Voice 3
+Waveform:      Triangle      Pulse
+Pulse Width:   -             700
+Attack:        3             7
+Decay:         0             8
+Sustain:       14            14
+Release:       4             4
+Release Point: 1             1
+Transpose:     12/0          -12
+Filter:        -             Yes
+Filter Mode:   -             B
+Resonance      -             0
+Autofilter:    -             -20
+
+
+-------------
+Viola/Strings
+-------------
+
+This one is touchy, very sensitive to both note duration and tempo.  It can work when everything is right, especially as a counterpoint harmony.
+
+Waveform:      Sawtooth
+Attack:        9
+Decay:         0
+Sustain:       12
+Release:       8
+Release Point: 0
+
+
+---------------
+Downhome Fiddle
+---------------
+
+If the tempo is quick and the notes are short, this fiddle envelope will bring any jaded listener to their feet.
+
+Waveform:      Pulse
+Pulse Width:   3600
+Attack:        5
+Decay:         3
+Sustain:       7
+Release:       0
+Release Point: 3
+
+
+----------
+Pipe Organ
+----------
+
+This one is a haunting pipe organ, invoking images of European cathedrals.
+
+Waveform:      Pulse
+Pulse Width:   2000
+Attack:        3
+Decay:         6
+Sustain:       6
+Release:       3
+Release Point  3
+
+
+------------
+Jazz Trumpet
+------------
+
+Depending on the song's tempo, this ranges from a lively jazz trumpet to a soulful blues dirge.
+
+Waveform:      Sawtooth
+Attack:        5
+Decay:         14
+Sustain:       0
+Release:       9
+Release Point: 1
+
+----------------
+
+
+Good luck with this introduction.
+
+Utah Blaine &
+the People of
+
+Half Moon Lake
+<504> 392-1146
+
