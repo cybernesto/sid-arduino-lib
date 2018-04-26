@@ -1,12 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>sid-jump-start</title>
-<!-- 2016-09-04 Sun 12:38 -->
+<title></title>
+<!-- 2018-04-26 gio 21:56 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Org-mode">
-<meta name="author" content="Giovanni Giorgi">
 
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -192,8 +191,7 @@ $(function() {
 </head>
 <body>
 <div id="content" class="container">
-<div class="row"><div class="col-md-9"><h1 class="title">sid-jump-start</h1>
-
+<div class="row"><div class="col-md-9"><h1 class="title"></h1>
 <div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><span class="section-number-2">1</span> The super minimal SID manual</h2>
 <div class="outline-text-2" id="text-1">
@@ -268,9 +266,8 @@ For more information look at <a href="http://en.wikiaudio.org/ADSR_envelope">htt
 <p>
 <i>The suggested setup is to have an arduino as a SID, driven via I2C (see examples)</i> 
 The I2C protocol in the example is very easy: send two bytes, one for
-the reguster and the second fo the value to store inside.
+the register and the second for the value to store inside.
 </p>
-
 
 
 <figure>
@@ -280,6 +277,7 @@ the reguster and the second fo the value to store inside.
 </div>
 </div>
 </div>
+
 <div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2"><span class="section-number-2">2</span> How to convert midi files and play them on Stereo Sid</h2>
 <div class="outline-text-2" id="text-2">
@@ -298,12 +296,12 @@ To convert it we used the 440hz (A4) center (midi 81,  0x1CD6 on SID).
 <h3 id="sec-2-1"><span class="section-number-3">2.1</span> Setup</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
-Because midi can generate only 3 voices at a time, you should edit
+Because SID can generate only 3 voices at a time, you should edit
 your midi with some program like AriaMaestosa 
 (<a href="http://ariamaestosa.sourceforge.net/">http://ariamaestosa.sourceforge.net/</a>) to be sure it fits nicely in
-your SID.
-This step is not necessary but it will simplify your track exporting
-and dumping
+your SID, i.e. does not use more then three instruments.
+If you do this step before dumping and exporting, the resulting file
+fill be easier to play.
 </p>
 </div>
 </div>
@@ -436,9 +434,8 @@ Release Point  3
 </nav>
 </div></div></div>
 <footer id="postamble" class="">
-<div><p class="author">Author: Giovanni Giorgi</p>
-<p class="date">Created: 2016-09-04 Sun 12:38</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org-mode</a> 8.2.10)</p>
+<div><p class="date">Created: 2018-04-26 gio 21:56</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org-mode</a> 9.0.5)</p>
 </div>
 </footer>
 </body>

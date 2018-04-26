@@ -1,5 +1,5 @@
 # This is an emacs-org-mode files. To edit it please use emacs org-mode
-  
+ 
 * The super minimal SID manual
 This manual has taken information on wikipedia and from this html page
 which reproduce the original datasheet[fn:1].
@@ -48,10 +48,10 @@ For more information look at [[http://en.wikiaudio.org/ADSR_envelope]]
 
 /The suggested setup is to have an arduino as a SID, driven via I2C (see examples)/ 
 The I2C protocol in the example is very easy: send two bytes, one for
-the reguster and the second fo the value to store inside.
-
+the register and the second for the value to store inside.
 
 [[./sid-registers.png]]
+
 * How to convert midi files and play them on Stereo Sid
 MIDI file are a very old standard which fit more or less in the Sid.
 MIDI specification is 127 note wide, whereas SID has 94 possibilites.
@@ -62,12 +62,12 @@ The function will emit a silence for all notes the SID cannot play.
 /SID playable MIDI range is 25-118./
 To convert it we used the 440hz (A4) center (midi 81,  0x1CD6 on SID).
 ** Setup
-Because midi can generate only 3 voices at a time, you should edit
+Because SID can generate only 3 voices at a time, you should edit
 your midi with some program like AriaMaestosa 
 (http://ariamaestosa.sourceforge.net/) to be sure it fits nicely in
-your SID.
-This step is not necessary but it will simplify your track exporting
-and dumping
+your SID, i.e. does not use more then three instruments.
+If you do this step before dumping and exporting, the resulting file
+fill be easier to play.
 ** Compile midicsv
 Download and compile midicsv from
 http://www.fourmilab.ch/webtools/midicsv/  
@@ -123,6 +123,9 @@ for more ADSR patterns
 
 
 
+* Footnotes
+
+[fn:1]  http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet
 * Config                                                           :noexport:
 
 #+OPTIONS: num:5 whn:5 toc:5 H:6
@@ -135,8 +138,6 @@ for more ADSR patterns
 # after-save-hook: org-twbs-export-to-html
 # End:
 
-* Footnotes
 
-[fn:1]  http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet
 
 
