@@ -7,7 +7,10 @@ Stereo Effect by Giovanni Giorgi
 
 Take a look also at
 https://github.com/farvardin/C64-music/tree/master/sid_arduino
-for a dump of common-used musics
+for a dump of common-used musics.
+I added the sid_player example from the faravdin source code for a demo of this
+library capabilities.
+
 
 
 Installation
