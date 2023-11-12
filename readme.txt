@@ -11,6 +11,8 @@ for a dump of common-used musics.
 I added the sid_player example from the faravdin source code for a demo of this
 library capabilities.
 
+For list of changes refert to https://github.com/daitangio/sid-arduino-lib/blob/master/CHANGELOG.md
+For tips and news refer to http://gioorgi.com/tag/stereosid/
 
 
 Installation
