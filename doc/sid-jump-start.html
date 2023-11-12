@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title></title>
+<!-- 2018-04-26 gio 21:56 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Org-mode">
+
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style type="text/css">
+/* org mode styles on top of twbs */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-size: 18px;
+    margin-bottom: 105px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 101px;
+    background-color: #f5f5f5;
+}
+
+footer > div {
+    padding: 10px;
+}
+
+footer p {
+    margin: 0 0 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#table-of-contents {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+blockquote p {
+    font-size: 18px;
+}
+
+pre {
+    font-size: 16px;
+}
+
+.footpara {
+    display: inline-block;
+}
+
+figcaption {
+  font-size: 16px;
+  color: #666;
+  font-style: italic;
+  padding-bottom: 15px;
+}
+
+/* from twbs docs */
+
+.bs-docs-sidebar.affix {
+    position: static;
+}
+@media (min-width: 768px) {
+    .bs-docs-sidebar {
+        padding-left: 20px;
+    }
+}
+
+/* All levels of nav */
+.bs-docs-sidebar .nav > li > a {
+    display: block;
+    padding: 4px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #999;
+}
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus {
+    padding-left: 19px;
+    color: #A1283B;
+    text-decoration: none;
+    background-color: transparent;
+    border-left: 1px solid #A1283B;
+}
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > .active:hover > a,
+.bs-docs-sidebar .nav > .active:focus > a {
+    padding-left: 18px;
+    font-weight: bold;
+    color: #A1283B;
+    background-color: transparent;
+    border-left: 2px solid #A1283B;
+}
+
+/* Nav: second level (shown on .active) */
+.bs-docs-sidebar .nav .nav {
+    display: none; /* Hide by default, but at >768px, show it */
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav > li > a:focus {
+    padding-left: 29px;
+}
+.bs-docs-sidebar .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav > .active:focus > a {
+    padding-left: 28px;
+    font-weight: 500;
+}
+
+/* Nav: third level (shown on .active) */
+.bs-docs-sidebar .nav .nav .nav {
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 40px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav .nav > li > a:focus {
+    padding-left: 39px;
+}
+.bs-docs-sidebar .nav .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
+    padding-left: 38px;
+    font-weight: 500;
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .bs-docs-sidebar .nav > .active > ul {
+        display: block;
+    }
+    /* Widen the fixed sidebar */
+    .bs-docs-sidebar.affix,
+    .bs-docs-sidebar.affix-bottom {
+        width: 213px;
+    }
+    .bs-docs-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 20px;
+    }
+    .bs-docs-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+    .bs-docs-sidebar.affix .bs-docs-sidenav,.bs-docs-sidebar.affix-bottom .bs-docs-sidenav {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .bs-docs-sidebar.affix-bottom,
+    .bs-docs-sidebar.affix {
+        width: 263px;
+    }
+}
+</style>
+<script type="text/javascript">
+$(function() {
+    'use strict';
+
+    $('.bs-docs-sidebar li').first().addClass('active');
+
+    $(document.body).scrollspy({target: '.bs-docs-sidebar'});
+
+    $('.bs-docs-sidebar').affix();
+});
+</script>
+</head>
+<body>
+<div id="content" class="container">
+<div class="row"><div class="col-md-9"><h1 class="title"></h1>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> The super minimal SID manual</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This manual has taken information on wikipedia and from this html page
+which reproduce the original datasheet<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+</p>
+
+<p>
+For better performance, it is suggested to use an arduino uno as a
+I2C-connected SID emulator.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Let's Start</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+<i>The 6581 Sound Interface Device (SID) is a single-chip,  3-voice electronic music synthesizer/sound effects generator compatible with the 65XX and similar microprocessor families</i>
+</p>
+
+<p>
+The <a href="https://en.wikipedia.org/wiki/MOS_Technology_SID">SID</a> has been part of the C/64 success.
+</p>
+
+<p>
+This arduino emulation library divert Voice2 to another pin, to enable a
+"Stero" effect somewhat.
+Connect pin9 and pin 10 to two piezo speaker, and the other side to
+the ground.
+</p>
+
+<p>
+The 6581 consists of three synthesizer “voices” which can be used
+independently or in conjunction to create complex sounds. 
+Each voice consists of a Tone Oscillator/Waveform Generator, an
+Envelope Generator and an Amplitude Modulator.
+The Envelope Generator is controlled via an ADSR (Attack Decay Sustain
+Release)  configuration.
+</p>
+
+<p>
+When a mechanical musical instrument produces sound, the Loudness of
+the sound produced changes over time in a way that varies from
+instrument to instrument. When a pipe organ's key is pressed, for
+example, it plays a note at constant volume; the sound dies quickly
+when the key is released. 
+By contrast, the sound of a guitar is
+loudest immediately after a string is plucked, and quickly fades. 
+</p>
+
+<p>
+A synthesizer's ADSR envelope is a way to tailor the timbre for the
+synth, sometimes to make it sound more like a mechanical instrument. 
+A quick attack with little decay helps it sound more like an organ; a
+longer decay and zero sustain makes it sound more like a guitar. While
+envelopes are most often applied to volume, they are also commonly
+used to control other sound elements, such as filter frequencies or
+oscillator pitches.
+</p>
+
+<p>
+Today modern synthesizers use samples to reproduce sound with a strong
+accuracy. 
+But in  1982, ADSR was a state-of-the-art for a music chip.
+</p>
+
+<p>
+For more information look at <a href="http://en.wikiaudio.org/ADSR_envelope">http://en.wikiaudio.org/ADSR_envelope</a>
+</p>
+
+<p>
+<i>The suggested setup is to have an arduino as a SID, driven via I2C (see examples)</i> 
+The I2C protocol in the example is very easy: send two bytes, one for
+the register and the second for the value to store inside.
+</p>
+
+
+<figure>
+<p><img src="./sid-registers.png" class="img-responsive" alt="sid-registers.png">
+</p>
+</figure>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> How to convert midi files and play them on Stereo Sid</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+MIDI file are a very old standard which fit more or less in the Sid.
+MIDI specification is 127 note wide, whereas SID has 94 possibilites.
+MIDI support a bit more notes.
+Stereo Sid provide you a midi2Sid function to remap a 8bit Midi note
+to a 16bit SID register spec.
+The function will emit a silence for all notes the SID cannot play.
+<i>SID playable MIDI range is 25-118.</i>
+To convert it we used the 440hz (A4) center (midi 81,  0x1CD6 on SID).
+</p>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Setup</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Because SID can generate only 3 voices at a time, you should edit
+your midi with some program like AriaMaestosa 
+(<a href="http://ariamaestosa.sourceforge.net/">http://ariamaestosa.sourceforge.net/</a>) to be sure it fits nicely in
+your SID, i.e. does not use more then three instruments.
+If you do this step before dumping and exporting, the resulting file
+fill be easier to play.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Compile midicsv</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Download and compile midicsv from
+<a href="http://www.fourmilab.ch/webtools/midicsv/">http://www.fourmilab.ch/webtools/midicsv/</a>  
+Midicsv is a very good tool and will save your day
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Simple approach</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+A simple approach is to extract 3 tracks from a midi and generate three
+simple C source arrays to push in a player sketch.
+Midicsv dump the single note like
+ <code>Track, Time, Note_on_c, Channel, Note, Velocity</code>
+Read midicsv manual for more information.
+</p>
+
+<p>
+With this command
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">./midicsv  doremifasolasido.mid  | egrep ^2 | egrep Note_on_c |cut -d , -f 5,2
+</pre>
+</div>
+<p>
+you can extract a list of  { duration, note } for track 2.
+We track down <i>only</i> the note start for every track (it is a
+over-simplification). 
+The key idea is to have three "queue" with a pointer to the current
+note and a global time counter.
+after pushing 3 notes, we increment the clock and play the next note
+when is the right time.
+</p>
+
+<p>
+The empire_player.ino demo will show you this in practice.
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Drums: SID Configuration</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Take a look at 
+<a href="http://www.lyonlabs.org/commodore/stereo-sid/qlink/half-moon-lake-patches-v1.txt">http://www.lyonlabs.org/commodore/stereo-sid/qlink/half-moon-lake-patches-v1.txt</a>
+for more ADSR patterns
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Viola/Strings</h3>
+<div class="outline-text-3" id="text-3-1">
+<hr >
+<p>
+Waveform:      Sawtooth
+Attack:        9
+Decay:         0
+Sustain:       12
+Release:       8
+Release Point: 0
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Pipe Organ</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Waveform:      Pulse
+Pulse Width:   2000   Reg 2/3 (12 bit però)
+                      PWout = (PWnReg/40.95) %
+Attack:        3
+Decay:         6
+Sustain:       6
+Release:       3
+Release Point  3
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Reference</h2>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<a href="http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet">http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet</a>
+</p></div>
+
+
+</div>
+</div></div><div class="col-md-3"><nav id="table-of-contents">
+<div id="text-table-of-contents" class="bs-docs-sidebar">
+<ul class="nav">
+<li><a href="#sec-1">1. The super minimal SID manual</a>
+<ul class="nav">
+<li><a href="#sec-1-1">1.1. Let's Start</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. How to convert midi files and play them on Stereo Sid</a>
+<ul class="nav">
+<li><a href="#sec-2-1">2.1. Setup</a></li>
+<li><a href="#sec-2-2">2.2. Compile midicsv</a></li>
+<li><a href="#sec-2-3">2.3. Simple approach</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Drums: SID Configuration</a>
+<ul class="nav">
+<li><a href="#sec-3-1">3.1. Viola/Strings</a></li>
+<li><a href="#sec-3-2">3.2. Pipe Organ</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. Reference</a></li>
+</ul>
+</div>
+</nav>
+</div></div></div>
+<footer id="postamble" class="">
+<div><p class="date">Created: 2018-04-26 gio 21:56</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org-mode</a> 9.0.5)</p>
+</div>
+</footer>
+</body>
+</html>

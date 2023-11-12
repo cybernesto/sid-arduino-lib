@@ -1,0 +1,8 @@
+StereoSID-2.0.4 upcoming
+	* Better midi2Sid conversion function
+StereoSID-2.0.3
+        * Fixed library.properties for correct arduino ide loading
+StereoSID-2.0.2
+        * First implementation of stereo SID (VOICE2 on new 'LEFT' CHANNEL)
+
+SID-2.0.1
